@@ -46,6 +46,10 @@ module.exports = class BlockChain {
 
     }
 
+    getLength() {
+        return this.chain.length
+    }
+
 
 }
 
