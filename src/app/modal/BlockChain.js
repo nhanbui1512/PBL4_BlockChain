@@ -50,6 +50,6 @@ module.exports = class BlockChain {
         return this.chain.length
     }
 
-
 }
+
 
