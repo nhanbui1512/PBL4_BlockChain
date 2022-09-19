@@ -2,12 +2,14 @@ var Block = require('./Block')
 
 
 module.exports = class BlockChain {
+
     constructor(difficulty) {
         const genesisBlock = new Block('000' , {
             isGenesis: true
         })
         this.chain = [genesisBlock]
         this.difficulty = difficulty
+        this.nodes = []
     }
 
     getLastBlock() {
@@ -49,6 +51,13 @@ module.exports = class BlockChain {
     getLength() {
         return this.chain.length
     }
+
+
+    addNewNode(node){
+        this.nodes.push(node)
+    }
+
+
 
 }
 
