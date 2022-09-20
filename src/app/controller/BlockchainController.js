@@ -30,24 +30,26 @@ class BlockChainController {
     rigisterNode(req, res){
         var nodeAddress = req.body.node
         testChain.addNewNode(nodeAddress)
-        res.redirect('/')
+        res.redirect('/blockchain/nodes')
     }
 
-    consensus() {
+    consensus(req , res) {
         for (let i = 0; i < testChain.nodes.length; i++) {
-            fetch(`${nodes[i]}/blockchain/chain`)
+            fetch(`${testChain.nodes[i]}/blockchain/chain`)
             .then(res => {
                 return res.json()
             })
             .then((result) => {
-                const newChain = new BlockChain(4)
-
-                for (let i = 0; i < result.length; i++) {
-                    newChain.chain[i] = Block(result[i])
-                }
-
+                console.log(result)
             })
         }
+
+        res.redirect('/blockchain/chain')
+
+    }
+
+    nodes(req, res){
+        res.send(testChain.nodes)
     }
 
 }

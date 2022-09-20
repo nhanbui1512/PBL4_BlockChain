@@ -8,5 +8,6 @@ router.get('/chain', BlockchainController.getChain)
 router.use('/mine' ,BlockchainController.mine )
 router.use('/consensus', BlockchainController.consensus)
 router.post('/register' , BlockchainController.rigisterNode)
+router.get('/nodes', BlockchainController.nodes)
 
 module.exports = router;
