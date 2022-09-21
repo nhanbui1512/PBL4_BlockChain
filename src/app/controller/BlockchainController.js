@@ -52,8 +52,12 @@ class BlockChainController {
                    newBlock.mineVar = result[i].mineVar
                    newChain.chain[i] = newBlock
                 }
-                console.log(newChain.chain)
-                console.log(newChain.isValid())
+                return newChain
+            })
+            .then((newChain) => {
+                if(newChain.chain.length > testChain.chain.length &&  newChain.isValid() == true){
+                    testChain.chain = newChain.chain
+                }
             })
 
         }
