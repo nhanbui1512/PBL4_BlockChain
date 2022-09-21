@@ -1,7 +1,28 @@
-var Block = require('./Block')
+const hash = require('crypto-js/sha256')
 
 
-module.exports = class BlockChain {
+class Block {
+    constructor (preHash , data){
+        this.preHash = preHash
+        this.data = data
+        this.timeStamp = new Date()
+        this.hash = this.calculatorHash()
+        this.mineVar = 0;
+    }
+
+    calculatorHash () {
+        return hash(this.preHash + JSON.stringify(this.data) + this.timeStamp + this.mineVar ).toString();
+    }
+
+    mine(difficulty) {
+        while( !this.hash.startsWith('0'.repeat(difficulty)) ){
+            this.mineVar ++  
+            this.hash = this.calculatorHash();
+        }
+    }
+}
+
+class BlockChain {
 
     constructor(difficulty) {
         const genesisBlock = new Block('000' , {
@@ -20,18 +41,14 @@ module.exports = class BlockChain {
 
         const lastBlock = this.getLastBlock()
         const newBlock = new Block(lastBlock.hash , data)
-
-        console.log('Star mining')
-        console.time('mine')
         newBlock.mine(this.difficulty)
-        console.timeEnd('mine')
-        console.log('End mining')
 
         this.chain.push(newBlock)
     }
 
    
     isValid() {
+
         for (let i = 1; i < this.chain.length; i++) {
             const currentBlock = this.chain[i]
             const preBlock = this.chain[i - 1]
@@ -55,8 +72,28 @@ module.exports = class BlockChain {
         this.nodes.push(node)
     }
 
-
-
 }
 
 
+var testChain = new BlockChain(4)
+
+testChain.addBlock({
+    from: "Hue",
+    to: "DaNang",
+    amount: 2000,
+})
+
+testChain.addBlock({
+    from: "Hue",
+    to: "DaNang",
+    amount: 2000,
+})
+
+testChain.addBlock({
+    from: "Hue",
+    to: "DaNang",
+    amount: 2000,
+})
+
+console.log(testChain.chain)
+console.log(testChain.isValid())

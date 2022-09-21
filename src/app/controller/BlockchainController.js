@@ -15,6 +15,8 @@ class BlockChainController {
 
     getChain(req, res){
         res.status(200).json(testChain.chain)
+        console.log(testChain.isValid());
+
     }
 
     mine(req, res){ 
@@ -40,16 +42,31 @@ class BlockChainController {
                 return res.json()
             })
             .then((result) => {
-                console.log(result)
+                const newChain = new BlockChain(4)
+                for (let i = 0; i < result.length; i++) {
+                   const newBlock = new Block
+                   newBlock.preHash = result[i].preHash
+                   newBlock.data = result[i].data
+                   newBlock.timeStamp = result[i].timeStamp
+                   newBlock.hash = result[i].hash
+                   newBlock.mineVar = result[i].mineVar
+                   newChain.chain[i] = newBlock
+                }
+                console.log(newChain.chain)
+                console.log(newChain.isValid())
             })
-        }
 
+        }
         res.redirect('/blockchain/chain')
 
     }
 
     nodes(req, res){
         res.send(testChain.nodes)
+    }
+
+    isValid(req, res){
+        res.send(testChain.isValid())
     }
 
 }

@@ -2,7 +2,6 @@ const express = require('express')
 const path = require('path')
 const hbs  = require('express-handlebars');
 const router = require('./routes/index')
-var BlockChain = require('./app/modal/BlockChain');
 const route = require('./routes')
 
 const port = 3001;

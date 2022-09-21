@@ -5,7 +5,7 @@ module.exports = class Block {
     constructor (preHash , data){
         this.preHash = preHash
         this.data = data
-        this.timeStamp = new Date()
+        this.timeStamp = new Date().toString()
         this.hash = this.calculatorHash()
         this.mineVar = 0;
     }
@@ -14,10 +14,14 @@ module.exports = class Block {
         return hash(this.preHash + JSON.stringify(this.data) + this.timeStamp + this.mineVar ).toString();
     }
 
+    handleCalHash(preHash, data , timeStamp , mineVar){
+        return hash(preHash + JSON.stringify(data) + timeStamp + mineVar ).toString();
+    }
+
     mine(difficulty) {
         while( !this.hash.startsWith('0'.repeat(difficulty)) ){
-            this.hash = this.calculatorHash();
             this.mineVar ++  
+            this.hash = this.calculatorHash();
         }
     }
 }
