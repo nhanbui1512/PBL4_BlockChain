@@ -39,7 +39,10 @@ class BlockChainController {
         for (let i = 0; i < testChain.nodes.length; i++) {
             fetch(`${testChain.nodes[i]}/blockchain/chain`)
             .then(res => {
-                return res.json()
+                if(res.ok){
+                    return res.json()
+                }
+                throw new Error('Some Thing Error')
             })
             .then((result) => {
                 const newChain = new BlockChain(4)
@@ -58,6 +61,9 @@ class BlockChainController {
                 if(newChain.chain.length > testChain.chain.length &&  newChain.isValid() == true){
                     testChain.chain = newChain.chain
                 }
+            })
+            .catch((err) => {
+                console.log(err)
             })
 
         }
