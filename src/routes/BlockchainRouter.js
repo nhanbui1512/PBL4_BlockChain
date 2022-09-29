@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/createblock' , BlockchainController.createblock )
 router.get('/chain', BlockchainController.getChain)
-router.use('/mine' ,BlockchainController.mine )
-router.use('/consensus', BlockchainController.consensus)
+router.post('/mine' ,BlockchainController.mine )
+router.get('/consensus', BlockchainController.consensus)
 router.post('/register' , BlockchainController.rigisterNode)
 router.get('/nodes', BlockchainController.nodes)
 router.get('/isvalid',BlockchainController.isValid)

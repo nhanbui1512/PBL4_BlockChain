@@ -55,6 +55,15 @@ module.exports = class BlockChain {
         this.nodes.push(node)
     }
 
+    syncNode(node){
+        for (let i = 0; i < this.nodes.length; i++) {
+
+            fetch( `${this.nodes[i]}/blockchain/register`, {
+                node: node
+            })
+        }
+    }
+
 
 
 }

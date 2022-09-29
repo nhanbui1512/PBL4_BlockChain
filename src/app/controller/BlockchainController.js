@@ -15,8 +15,6 @@ class BlockChainController {
 
     getChain(req, res){
         res.status(200).json(testChain.chain)
-        console.log(testChain.isValid());
-
     }
 
     mine(req, res){ 
@@ -24,7 +22,15 @@ class BlockChainController {
             from: req.body.from,
             to: req.body.to,
             amount: req.body.amount
-        })
+        } , function () {
+
+            for(var i = 0 ; i < testChain.nodes ; i++){
+                fetch(`${testChain.nodes[i]}/blockchain/consensus`)
+                    .then((res) => res.json())
+            }
+        } )
+
+        
 
         res.redirect('/blockchain/chain')
     }
@@ -34,6 +40,8 @@ class BlockChainController {
         testChain.addNewNode(nodeAddress)
         res.redirect('/blockchain/nodes')
     }
+
+
 
     consensus(req , res) {
         for (let i = 0; i < testChain.nodes.length; i++) {

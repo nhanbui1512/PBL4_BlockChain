@@ -1,11 +1,13 @@
 const BlockChainRouter = require('./BlockchainRouter')
 
 module.exports = function (app) {
-    app.use('/blockchain' , BlockChainRouter)
-
+    app.use('/blockchain' , BlockChainRouter) 
 
     app.use('/', (req , res) => {
         res.send ('Home Page')
     })
     
 }
+
+const BlockChainController = require('../app/controller/BlockchainController')
+
