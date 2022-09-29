@@ -9,5 +9,4 @@ module.exports = function (app) {
     
 }
 
-const BlockChainController = require('../app/controller/BlockchainController')
 

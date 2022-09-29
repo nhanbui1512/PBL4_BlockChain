@@ -22,15 +22,18 @@ class BlockChainController {
             from: req.body.from,
             to: req.body.to,
             amount: req.body.amount
-        } , function () {
-
-            for(var i = 0 ; i < testChain.nodes ; i++){
-                fetch(`${testChain.nodes[i]}/blockchain/consensus`)
-                    .then((res) => res.json())
-            }
         } )
 
-        
+        fetch(`${testChain.nodes[0]}/blockchain/consensus`, {
+            method: 'GET', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // body: JSON.stringify(req.body),
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
         res.redirect('/blockchain/chain')
     }
