@@ -1,5 +1,6 @@
 const express = require('express');
 const BlockchainController = require('../app/controller/BlockchainController');
+
 const router = express.Router();
 
 
@@ -10,5 +11,6 @@ router.get('/consensus', BlockchainController.consensus)
 router.post('/register' , BlockchainController.rigisterNode)
 router.get('/nodes', BlockchainController.nodes)
 router.get('/isvalid',BlockchainController.isValid)
+router.get('/',BlockchainController.startServer);
 
 module.exports = router;

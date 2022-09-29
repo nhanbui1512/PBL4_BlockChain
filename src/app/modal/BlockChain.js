@@ -64,6 +64,16 @@ module.exports = class BlockChain {
         }
     }
 
+    checkNode(nodeAddress){
+        for (let i = 0; i < this.nodes.length; i++) {
+            if(nodeAddress === this.nodes[i]){
+                return false
+            }
+        }
+
+        return true
+    }
+
 
 
 }

@@ -4,8 +4,16 @@ var Block = require('../modal/Block')
 
 const testChain = new BlockChain(4)
 
-
 class BlockChainController {
+
+
+
+    startServer(req , res){
+        
+        testChain.nodes[0] = 'http://localhost:3000'
+
+        res.redirect('/blockchain/consensus')
+    }
     
     createblock(req, res) {
         res.render('createblock' , {
@@ -38,13 +46,16 @@ class BlockChainController {
         res.redirect('/blockchain/chain')
     }
 
+
+
+
     rigisterNode(req, res){
         var nodeAddress = req.body.node
-        testChain.addNewNode(nodeAddress)
+        if(testChain.checkNode(nodeAddress) == true){
+            testChain.addNewNode(nodeAddress)
+        }
         res.redirect('/blockchain/nodes')
     }
-
-
 
     consensus(req , res) {
         for (let i = 0; i < testChain.nodes.length; i++) {
