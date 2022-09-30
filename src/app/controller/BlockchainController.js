@@ -10,9 +10,29 @@ class BlockChainController {
 
     startServer(req , res){
         
-        testChain.nodes[0] = 'http://localhost:3000'
 
-        res.redirect('/blockchain/consensus')
+        var nodeAddress = req.rawHeaders[1].toString()
+
+        if(nodeAddress !== 'localhost:3000'){
+            testChain.nodes[0] = 'http://localhost:3000'
+
+            fetch(`${testChain.nodes[0]}/blockchain/register`, {
+                method: 'POST', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    node: 'http://' + nodeAddress
+                }),
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        res.send('successfull')
+
+
+        
     }
     
     createblock(req, res) {
@@ -32,16 +52,21 @@ class BlockChainController {
             amount: req.body.amount
         } )
 
-        fetch(`${testChain.nodes[0]}/blockchain/consensus`, {
-            method: 'GET', // or 'PUT'
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            // body: JSON.stringify(req.body),
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        if(testChain.nodes.length > 0 ){
+            
+            fetch(`${testChain.nodes[0]}/blockchain/consensus`, {
+                method: 'GET', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // body: JSON.stringify(req.body),
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        
 
         res.redirect('/blockchain/chain')
     }
@@ -84,12 +109,17 @@ class BlockChainController {
                     testChain.chain = newChain.chain
                 }
             })
+            .then(() => {
+                res.redirect('/blockchain/chain')
+                return 
+            })
             .catch((err) => {
                 console.log(err)
+                res.redirect('/blockchain/chain')
+
             })
 
         }
-        res.redirect('/blockchain/chain')
 
     }
 
