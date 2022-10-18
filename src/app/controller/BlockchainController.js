@@ -1,5 +1,19 @@
 var BlockChain = require('../modal/BlockChain')
 var Block = require('../modal/Block')
+const request = require('request');
+const { json } = require('express');
+
+
+const options = {
+    url: 'http://localhost:3000/blockchain/nodes',
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Accept-Charset': 'utf-8',
+        'User-Agent': 'my-reddit-client'
+    }
+};
+
 
 
 const testChain = new BlockChain(4)
@@ -7,45 +21,52 @@ const testChain = new BlockChain(4)
 class BlockChainController {
 
 
-
-    startServer(req , res){
+    // GET localhost:
+    async startServer(req , res){
+        var nodeAddress = 'http://' + req.rawHeaders[1].toString()
         
+        if(nodeAddress !== 'http://localhost:3000'){
 
-        var nodeAddress = req.rawHeaders[1].toString()
-
-        if(nodeAddress !== 'localhost:3000'){
             testChain.nodes[0] = 'http://localhost:3000'
 
-            fetch(`${testChain.nodes[0]}/blockchain/register`, {
-                method: 'POST', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    node: 'http://' + nodeAddress
-                }),
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+            request(options, function(err, res, body) {
+                var result = JSON.parse(body)
+                for (let i = 0; i < result.length; i++) {
+                    if( result[i] != nodeAddress )  {
+                        testChain.addNewNode(result[i])
+                    }
+                }
             });
+            
+            request.post({
+                url: 'http://localhost:3000/register',
+                form: {
+                    node: nodeAddress
+                }
+            }, () => {
+
+            } )
+
+            
         }
-        res.send('successfull')
-
-
-        
+        res.send('Successful')
     }
     
-    createblock(req, res) {
+
+    // GET /blockchain/createblock
+    async createblock(req, res) {
         res.render('createblock' , {
             layout: false
         });
     }
 
-    getChain(req, res){
+    // GET /blockchain/chain
+    async getChain(req, res){
         res.status(200).json(testChain.chain)
     }
 
-    mine(req, res){ 
+    // POST //blockchain/mine
+    async mine(req, res){ 
         testChain.addBlock({
             from: req.body.from,
             to: req.body.to,
@@ -54,83 +75,88 @@ class BlockChainController {
 
         if(testChain.nodes.length > 0 ){
             
-            fetch(`${testChain.nodes[0]}/blockchain/consensus`, {
-                method: 'GET', // or 'PUT'
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                // body: JSON.stringify(req.body),
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            for (let i = 0; i < testChain.nodes.length; i++) {
+
+                fetch(`${testChain.nodes[i]}/blockchain/consensus`, {
+                    method: 'GET', // or 'PUT'
+                    // body: JSON.stringify(req.body),
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+            
         }
-
-        
-
         res.redirect('/blockchain/chain')
     }
 
 
-
-
-    rigisterNode(req, res){
+    // POST /blockchain/register
+    async rigisterNode(req, res){
         var nodeAddress = req.body.node
         if(testChain.checkNode(nodeAddress) == true){
+
+            for (let i = 0; i < testChain.nodes.length; i++) {
+                request.post({
+                    url: `${testChain.nodes[i]}/register`,
+                    form: {
+                        node: nodeAddress
+                    }
+                })
+            }
             testChain.addNewNode(nodeAddress)
         }
         res.redirect('/blockchain/nodes')
     }
 
-    consensus(req , res) {
+    // GET /blockchain/consensus
+    async consensus(req , res) {
+  
         for (let i = 0; i < testChain.nodes.length; i++) {
-            fetch(`${testChain.nodes[i]}/blockchain/chain`)
-            .then(res => {
-                if(res.ok){
-                    return res.json()
+            const element = testChain.nodes[i];
+            request(`${element}/blockchain/chain`, function (error, response, body) {
+                if(error){
+                    console.log(error)
                 }
-                throw new Error('Some Thing Error')
-            })
-            .then((result) => {
-                const newChain = new BlockChain(4)
-                for (let i = 0; i < result.length; i++) {
-                   const newBlock = new Block
-                   newBlock.preHash = result[i].preHash
-                   newBlock.data = result[i].data
-                   newBlock.timeStamp = result[i].timeStamp
-                   newBlock.hash = result[i].hash
-                   newBlock.mineVar = result[i].mineVar
-                   newChain.chain[i] = newBlock
-                }
-                return newChain
-            })
-            .then((newChain) => {
-                if(newChain.chain.length > testChain.chain.length &&  newChain.isValid() == true){
-                    testChain.chain = newChain.chain
-                }
-            })
-            .then(() => {
-                res.redirect('/blockchain/chain')
-                return 
-            })
-            .catch((err) => {
-                console.log(err)
-                res.redirect('/blockchain/chain')
+                else{
+                    const result = JSON.parse(body)
+                    const newChain = new BlockChain(4)
 
-            })
+                    for (let i = 0; i < result.length; i++) {
+                        const newBlock = new Block
+                        newBlock.preHash = result[i].preHash
+                        newBlock.data = result[i].data
+                        newBlock.timeStamp = result[i].timeStamp
+                        newBlock.hash = result[i].hash
+                        newBlock.mineVar = result[i].mineVar
+                        newChain.chain[i] = newBlock
+                    }
 
+                    if(newChain.chain.length > testChain.chain.length &&  newChain.isValid() == true){
+                        testChain.chain = newChain.chain
+                    }
+
+                }
+             });
         }
+        
+        res.send('Consensus')
 
     }
 
-    nodes(req, res){
+
+    // GET blockchain/nodes
+    async nodes(req, res){
         res.send(testChain.nodes)
     }
 
-    isValid(req, res){
+
+    // GET blockchain/isvalid
+    async isValid(req, res){
         res.send(testChain.isValid())
     }
 
 }
 
 module.exports = new BlockChainController
+
