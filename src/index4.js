@@ -30,3 +30,8 @@ app.listen(port , () => {
 })
 
 
+fetch(`http://localhost:3004/`)
+  .then((res) => {
+    fetch('http://localhost:3004/consensus')
+  })
+
