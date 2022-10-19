@@ -8,7 +8,6 @@ const route = require('./routes')
 const port = 3000;
 const app = express();
 
-
 app.use(express.urlencoded({
     extended: true
   }));
@@ -30,3 +29,6 @@ app.listen(port , () => {
 })
 
 
+fetch(`http://localhost:3000/`)
+
+ 

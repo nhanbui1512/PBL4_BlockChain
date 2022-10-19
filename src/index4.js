@@ -5,7 +5,7 @@ const router = require('./routes/index')
 var BlockChain = require('./app/modal/BlockChain');
 const route = require('./routes')
 
-const port = 3003;
+const port = 3004;
 const app = express();
 
 
@@ -29,5 +29,4 @@ app.listen(port , () => {
     console.log(`Listening at localhost:${port}`)
 })
 
-fetch(`http://localhost:3003/`)
 

@@ -29,3 +29,4 @@ app.listen(port , () => {
 })
 
 
+fetch(`http://localhost:3001/`)

@@ -29,10 +29,12 @@ class BlockChainController {
 
             testChain.nodes[0] = 'http://localhost:3000'
 
+
+            // Lấy ra địa chỉ các node có trong mạng từ localhost:3000
             request(options, function(err, res, body) {
                 var result = JSON.parse(body)
                 for (let i = 0; i < result.length; i++) {
-                    if( result[i] != nodeAddress )  {
+                    if( result[i] != nodeAddress && testChain.checkNode(result[i]) == true )  {
                         testChain.addNewNode(result[i])
                     }
                 }
@@ -159,4 +161,7 @@ class BlockChainController {
 }
 
 module.exports = new BlockChainController
+
+
+
 
