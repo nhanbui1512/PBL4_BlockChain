@@ -29,14 +29,15 @@ app.listen(port , () => {
 })
 
 
-// fetch(`http://localhost:3001/`)
-//   .then((res) => {
-//     fetch('http://localhost:3001/consensus')
-//   })
 
+const request = require('request')
 
-
-fetch(`http://192.168.0.103:${port}/`)
-  .then((res) => {
-    fetch(`http://192.168.0.103:${port}/consensus`)
+  request
+  .get(`http://192.168.0.103:${port}/`)
+  .on('response', function(response) {
+    console.log(response.statusCode) // 200
+    console.log(response.headers['content-type']) // 'image/png'
   })
+  .pipe(request.get(`http://192.168.0.103:${port}/consensus`))
+
+

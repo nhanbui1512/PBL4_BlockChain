@@ -29,9 +29,16 @@ app.listen(port , () => {
 })
 
 
-fetch(`http://192.168.0.103:3000/`)
-  .then((res) => {
-    fetch('http://192.168.0.103:3000/consensus')
+
+  const request = require('request')
+
+  request
+  .get(`http://192.168.0.103:${port}/`)
+  .on('response', function(response) {
+    console.log(response.statusCode) // 200
+    console.log(response.headers['content-type']) // 'image/png'
   })
+  .pipe(request.get(`http://192.168.0.103:${port}/consensus`))
+
 
  
