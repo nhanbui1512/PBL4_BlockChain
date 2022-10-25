@@ -76,7 +76,7 @@ class BlockChainController {
             });
             
             request.post({
-                url: 'http://192.168.0.103:3000/register',
+                url: 'http://192.168.0.103:3000/blockchain/register',
                 form: {
                     node: nodeAddress
                 }
@@ -114,18 +114,8 @@ class BlockChainController {
             
             for (let i = 0; i < testChain.nodes.length; i++) {
 
-                // fetch(`${testChain.nodes[i]}/blockchain/consensus`, {
-                //     method: 'GET', // or 'PUT'
-                //     // body: JSON.stringify(req.body),
-                // })
-                // .catch((error) => {
-                //     console.error('Error:', error);
-                // });
-
                 request(`${testChain.nodes[i]}/blockchain/consensus`, { json: true }, (err, res, body) => {
                     if (err) { return console.log(err); }
-                    // console.log(body.url);
-                    // console.log(body.explanation);
                   });
             }
             
@@ -141,7 +131,7 @@ class BlockChainController {
 
             for (let i = 0; i < testChain.nodes.length; i++) {
                 request.post({
-                    url: `${testChain.nodes[i]}/register`,
+                    url: `${testChain.nodes[i]}/blockchain/register`,
                     form: {
                         node: nodeAddress
                     }
