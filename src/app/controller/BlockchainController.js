@@ -5,7 +5,7 @@ const { json } = require('express');
 
 
 const options = {
-    url: 'http://localhost:3000/blockchain/nodes',
+    url: 'http://192.168.0.103:3000/blockchain/nodes',
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -18,16 +18,53 @@ const options = {
 
 const testChain = new BlockChain(4)
 
+    var ChungChi = {
+        id: 1200,
+        sanpham: {
+            idSanPham: 123,
+            TenSanPham: "Kẹo Gạo Lứt Mè Đen",
+            NguyenLieu: [ {
+                idNguyenLieu: 2,
+                tenNguyenLieu: 'Mè Đen',
+                nguonGoc: 'Nhap Khau Thai Lan',
+                },
+
+                {
+                    idNguyenLieu: 3,
+                    tenNguyenLieu: 'Gao Lut',
+                    nguonGoc: 'A Luoi - Thua Thien Hue',
+                    },
+
+            ],
+            QuyTrinhSanXuat: {
+                idQuyTrinh: 12,
+                TenQuyTrinh: 'Quy Trinh San Xuat Keo Gao Lut Me Den',
+                MoTaQuyTrinh: 'Duoc San Xuat theo cong nghe Nhat Ban...',
+                URl: './img/keogaolut.pdf',
+
+            },
+            ngayCap: Date.now,
+            IDNhaSanXuat: 20123123,
+            IDCQKiemDinh: 21412313,
+        }
+    }
+
+    testChain.addBlock(ChungChi)
+
+
 class BlockChainController {
 
 
     // GET localhost:
     async startServer(req , res){
+
+        
+        // console.log(req)
         var nodeAddress = 'http://' + req.rawHeaders[1].toString()
         
-        if(nodeAddress !== 'http://localhost:3000'){
+        if(nodeAddress !== 'http://192.168.0.103:3000'){
 
-            testChain.nodes[0] = 'http://localhost:3000'
+            testChain.nodes[0] = 'http://192.168.0.103:3000'
 
 
             // Lấy ra địa chỉ các node có trong mạng từ localhost:3000
@@ -41,7 +78,7 @@ class BlockChainController {
             });
             
             request.post({
-                url: 'http://localhost:3000/register',
+                url: 'http://192.168.0.103:3000/register',
                 form: {
                     node: nodeAddress
                 }
@@ -157,6 +194,7 @@ class BlockChainController {
     async isValid(req, res){
         res.send(testChain.isValid())
     }
+
 
 }
 

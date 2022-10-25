@@ -29,7 +29,7 @@ app.listen(port , () => {
     console.log(`Listening at localhost:${port}`)
 })
 
-fetch(`http://localhost:3003/`)
+fetch(`http://192.168.0.103:${port}/`)
   .then((res) => {
-    fetch('http://localhost:3003/consensus')
+    fetch(`http://192.168.0.103:${port}/consensus`)
   })
