@@ -18,38 +18,38 @@ const options = {
 
 const testChain = new BlockChain(4)
 
-    var ChungChi = {
-        id: 1200,
-        sanpham: {
-            idSanPham: 123,
-            TenSanPham: "Kẹo Gạo Lứt Mè Đen",
-            NguyenLieu: [ {
-                idNguyenLieu: 2,
-                tenNguyenLieu: 'Mè Đen',
-                nguonGoc: 'Nhap Khau Thai Lan',
-                },
+// var ChungChi = {
+//     id: 1200,
+//     sanpham: {
+//         idSanPham: 123,
+//         TenSanPham: "Kẹo Gạo Lứt Mè Đen",
+//         NguyenLieu: [ {
+//             idNguyenLieu: 2,
+//             tenNguyenLieu: 'Mè Đen',
+//             nguonGoc: 'Nhap Khau Thai Lan',
+//             },
 
-                {
-                    idNguyenLieu: 3,
-                    tenNguyenLieu: 'Gao Lut',
-                    nguonGoc: 'A Luoi - Thua Thien Hue',
-                    },
+//             {
+//                 idNguyenLieu: 3,
+//                 tenNguyenLieu: 'Gao Lut',
+//                 nguonGoc: 'A Luoi - Thua Thien Hue',
+//                 },
 
-            ],
-            QuyTrinhSanXuat: {
-                idQuyTrinh: 12,
-                TenQuyTrinh: 'Quy Trinh San Xuat Keo Gao Lut Me Den',
-                MoTaQuyTrinh: 'Duoc San Xuat theo cong nghe Nhat Ban...',
-                URl: './img/keogaolut.pdf',
+//         ],
+//         QuyTrinhSanXuat: {
+//             idQuyTrinh: 12,
+//             TenQuyTrinh: 'Quy Trinh San Xuat Keo Gao Lut Me Den',
+//             MoTaQuyTrinh: 'Duoc San Xuat theo cong nghe Nhat Ban...',
+//             URl: './img/keogaolut.pdf',
 
-            },
-            ngayCap: Date.now,
-            IDNhaSanXuat: 20123123,
-            IDCQKiemDinh: 21412313,
-        }
-    }
+//         },
+//         ngayCap: Date.now,
+//         IDNhaSanXuat: 20123123,
+//         IDCQKiemDinh: 21412313,
+//     }
+// }
 
-    testChain.addBlock(ChungChi)
+// testChain.addBlock(ChungChi)
 
 
 class BlockChainController {
@@ -124,8 +124,8 @@ class BlockChainController {
 
                 request(`${testChain.nodes[i]}/blockchain/consensus`, { json: true }, (err, res, body) => {
                     if (err) { return console.log(err); }
-                    console.log(body.url);
-                    console.log(body.explanation);
+                    // console.log(body.url);
+                    // console.log(body.explanation);
                   });
             }
             
@@ -198,6 +198,27 @@ class BlockChainController {
     async isValid(req, res){
         res.send(testChain.isValid())
     }
+
+
+    // POST blockchain/ThemChungChi
+    async ThemChungChi(req, res)
+    {
+        var IDChungChi = req.body.IDChungChi
+        var SanPham = req.body.SanPham
+        var NgayCap = req.body.NgayCap
+        var IDNhaSanXuat = req.body.IDNhaSanXuat
+        var IDCQKiemDinh = req.body.IDCQKiemDinh
+
+        testChain.addBlock({
+            IDChungChi:IDChungChi,
+            SanPham: SanPham,
+            NgayCap: NgayCap,
+            IDNhaSanXuat,
+            IDCQKiemDinh: IDCQKiemDinh,
+        })
+        
+    }
+
 
 
 }
