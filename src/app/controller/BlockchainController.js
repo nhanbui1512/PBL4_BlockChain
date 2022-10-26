@@ -105,6 +105,10 @@ class BlockChainController {
                                 testChain.nodes[i] = rows[i].NodeAddress
                             }
                             dbHelper.closeDB(connection)
+
+                            request(`http://192.168.0.103:3000/blockchain/consensus`, { json: true }, (err, res, body) => {
+                                if (err) { return console.log(err); }
+                              });
                         })
                     })
                     .catch((err) => {
