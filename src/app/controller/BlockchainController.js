@@ -2,6 +2,8 @@ var BlockChain = require('../modal/BlockChain')
 var Block = require('../modal/Block')
 const request = require('request');
 const { json } = require('express');
+const dbHelper = require('../modal/DBHelper')
+
 
 
 const options = {
@@ -17,6 +19,8 @@ const options = {
 
 
 const testChain = new BlockChain(4)
+var theFirst = true
+
 
 // var ChungChi = {
 //     id: 1200,
@@ -75,6 +79,7 @@ class BlockChainController {
                 }
             });
             
+            // đăng ký địa chỉ node của mình cho cổng 3000
             request.post({
                 url: 'http://192.168.0.103:3000/blockchain/register',
                 form: {
@@ -84,7 +89,29 @@ class BlockChainController {
 
             } )
 
-            
+        }
+        else{
+            if(theFirst === true)
+            {
+                theFirst = false
+                dbHelper.connectDB()
+                    .then((connection) => {
+                        var stringQuery = 'SELECT * FROM nodes'
+                        connection.query(stringQuery, (err, data) => {
+                            // testChain.nodes = data
+                            // console.log(data)
+                            const rows = data
+                            for (let i = 0; i < rows.length; i++) {
+                                testChain.nodes[i] = rows[i].NodeAddress
+                            }
+                            dbHelper.closeDB(connection)
+                        })
+                    })
+                    .catch((err) => {
+                        console.log('cannot connect to DB ' , err)
+                    })
+            }   
+
         }
         res.send('Successful')
     }
