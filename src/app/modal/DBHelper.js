@@ -19,7 +19,6 @@ function connectDB () {
 }
 
 function closeDB (con) {
-    console.log('close DB')
     con.destroy();
 }
 

@@ -9,7 +9,7 @@ class APIController {
         dbHelper.connectDB()
             .then((connection) => {
                 connection.query(stringQuery, function(err , data) {
-                    console.log(data)
+                    // console.log(data)
                     dbHelper.closeDB(connection)
                     return res.status(200).json(data)
                 })
@@ -63,7 +63,7 @@ class APIController {
         .then((connection) => {
             connection.query(stringQuery, (err, data) => {
                 dbHelper.closeDB(connection)
-                return res.status(200).json(data)
+                res.status(200).json(data)
 
             })
         })
@@ -71,6 +71,24 @@ class APIController {
             console.log(err)
             res.send('Kết nối đến Database thất bại')
         })
+    }
+
+
+    GetAllThongTinNguyenLieu(req, res)
+    {
+        let stringQuery = 'SELECT nguyenlieu.IDNguyenLieu , nguongoc.IDNguonGoc , nguyenlieu.TenNguyenLieu , nguongoc.Tinh , nguongoc.Huyen_TP , nguongoc.Xa_Phuong FROM nguongoc , nguyenlieu WHERE nguyenlieu.IDNguonGoc = nguongoc.IDNguonGoc'
+        dbHelper.connectDB()
+            .then((connection) => {
+                connection.query(stringQuery, (err, data) => {
+                    res.status(200).json(data)
+                    return dbHelper.closeDB(connection)
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+                res.status(500)
+
+            })
     }
 
 
@@ -94,20 +112,26 @@ class APIController {
 
     insertNodeAddress(req, res){
         var nodeAddress = req.body.nodeAddress 
-        let stringQuery = `INSERT FROM nodes VALUES (${nodeAddress})`
+        let stringQuery = `INSERT INTO nodes (NodeAddress) VALUES ('${nodeAddress}')`
         dbHelper.connectDB()
             .then((connection) => {
                 connection.query(stringQuery, (err, data) => {
                     dbHelper.closeDB(connection)
-                    return res.status(200)
+                    return res.status(200).send('successful')
                 })
             })
             .catch((err) => {
                 console.log(err)
-                res.status(500)
+                res.status(500).send('unsuccessful')
             })
-
     }
+
+    insertProduct(req,res)
+    {
+        
+    }
+
+
 
     
 
