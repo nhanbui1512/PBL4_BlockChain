@@ -1,4 +1,8 @@
 const dbHelper = require('../modal/DBHelper')
+const hash = require('crypto-js/sha256')
+const subvn = require('sub-vn')
+const NguyenLieu = require('../modal/NguyenLieu')
+const { reset } = require('nodemon')
 
 
 class APIController {
@@ -9,8 +13,10 @@ class APIController {
         dbHelper.connectDB()
             .then((connection) => {
                 connection.query(stringQuery, function(err , data) {
-                    // console.log(data)
                     dbHelper.closeDB(connection)
+                    // for (let i = 0; i < data.length; i++) {
+                    //     data[i].Password = hash(data[i].Password).toString()
+                    // }
                     return res.status(200).json(data)
                 })
             })
@@ -132,6 +138,42 @@ class APIController {
     }
 
 
+
+
+    // //POST /api/insertmaterial
+    // insertMaterial(req,response)
+    // {
+    //     var tennguyenlieu = req.body.tennguyenlieu
+    //     var tinh = req.body.tinh
+    //     var huyen = req.body.huyen
+    //     var xa = req.body.xa
+    //     var userid = req.body.userid
+
+    //     dbHelper.connectDB()
+    //         .then(connection=> {
+    //             var insertquery = `insert into nguyenlieu (TenNguyenLieu,IDUser) values ('${tennguyenlieu}', '${userid}')`
+    //             connection.query(insertquery, (err, data) => {
+    //             })
+    //             return connection
+
+    //         })
+    //         .then((connection) => {
+    //             const ID = null
+    //             var getidquery = `select IDNguyenLieu from nguyenlieu where TenNguyenLieu = '${tennguyenlieu}' and IDUser = '${userid}'`
+    //             connection.query(getidquery,(err,data)=>{
+    //                 ID = data
+    //             })
+    //             console.log(ID)
+    //             return ID
+    //         })
+    //         .then((ID)=> {
+    //             response.send(ID)
+    //         })
+    //         .catch((err)=>{
+    //             response.send('fail')
+    //         })
+
+    // }
 
     
 

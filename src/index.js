@@ -4,7 +4,6 @@ const hbs  = require('express-handlebars');
 const router = require('./routes/index')
 var BlockChain = require('./app/modal/BlockChain');
 const route = require('./routes')
-
 const port = 3000;
 const app = express();
 

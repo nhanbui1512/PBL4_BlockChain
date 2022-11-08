@@ -9,5 +9,7 @@ router.get('/ttkiemdinh',APIController.getAllCQKiemDinh)
 router.get('/doanhnghiep/:id', APIController.getDoanhNghiepByID)
 router.get('/nodes',APIController.getAllNodeAddress)
 router.get('/nguyenlieu',APIController.GetAllThongTinNguyenLieu)
+
 router.post('/insertnode',APIController.insertNodeAddress)
+
 module.exports = router;
