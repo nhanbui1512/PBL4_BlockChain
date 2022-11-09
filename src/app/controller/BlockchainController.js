@@ -1,8 +1,10 @@
 var BlockChain = require('../model/BlockChain')
 var Block = require('../model/Block')
 const request = require('request');
-const { json } = require('express');
-const dbHelper = require('../model/DBHelper')
+const { json, response } = require('express');
+const Node = require('../model/node');
+const { multipleMongooseToObject } = require('../../util/mongoose');
+
 
 
 
@@ -94,6 +96,24 @@ class BlockChainController {
             if(theFirst === true)
             {
                 theFirst = false
+
+                Node.find({}, (err, data) => {
+                    if(!err){
+                        var result = multipleMongooseToObject(data)
+
+                        for (let i = 0; i < result.length; i++) {
+                            testChain.nodes[i] = result[i].nodeAddress
+                        }
+
+                        request(`http://127.0.0.1:3000/blockchain/consensus`, { json: true }, (err, res, body) => {
+                                if (err) { return console.log(err); }
+                              });
+
+                    }
+                    else{
+                        response.status(500).json('Fail')
+                    }
+                })
 
                 // CODE Lại kết nối cơ sở dữ liệu mongodb và lấy ra dữ liệu địa chỉ node
 
