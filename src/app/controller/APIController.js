@@ -1,7 +1,6 @@
-const dbHelper = require('../modal/DBHelper')
+const dbHelper = require('../model/DBHelper')
 const hash = require('crypto-js/sha256')
-const subvn = require('sub-vn')
-const NguyenLieu = require('../modal/NguyenLieu')
+// const NguyenLieu = require('../modal/NguyenLieu')
 const { reset } = require('nodemon')
 
 

@@ -1,13 +1,13 @@
-var BlockChain = require('../modal/BlockChain')
-var Block = require('../modal/Block')
+var BlockChain = require('../model/BlockChain')
+var Block = require('../model/Block')
 const request = require('request');
 const { json } = require('express');
-const dbHelper = require('../modal/DBHelper')
+const dbHelper = require('../model/DBHelper')
 
 
 
 const options = {
-    url: 'http://192.168.0.103:3000/blockchain/nodes',
+    url: 'http://127.0.0.1:3000/blockchain/nodes',
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -64,9 +64,9 @@ class BlockChainController {
 
         var nodeAddress = 'http://' + req.rawHeaders[1].toString()
         
-        if(nodeAddress !== 'http://192.168.0.103:3000'){
+        if(nodeAddress !== 'http://127.0.0.1:3000'){
 
-            testChain.nodes[0] = 'http://192.168.0.103:3000'
+            testChain.nodes[0] = 'http://127.0.0.1:3000'
 
 
             // Lấy ra địa chỉ các node có trong mạng từ localhost:3000
@@ -81,7 +81,7 @@ class BlockChainController {
             
             // đăng ký địa chỉ node của mình cho cổng 3000
             request.post({
-                url: 'http://192.168.0.103:3000/blockchain/register',
+                url: 'http://127.0.0.1:3000/blockchain/register',
                 form: {
                     node: nodeAddress
                 }
@@ -94,26 +94,29 @@ class BlockChainController {
             if(theFirst === true)
             {
                 theFirst = false
-                dbHelper.connectDB()
-                    .then((connection) => {
-                        var stringQuery = 'SELECT * FROM nodes'
-                        connection.query(stringQuery, (err, data) => {
-                            // testChain.nodes = data
-                            // console.log(data)
-                            const rows = data
-                            for (let i = 0; i < rows.length; i++) {
-                                testChain.nodes[i] = rows[i].NodeAddress
-                            }
-                            dbHelper.closeDB(connection)
 
-                            request(`http://192.168.0.103:3000/blockchain/consensus`, { json: true }, (err, res, body) => {
-                                if (err) { return console.log(err); }
-                              });
-                        })
-                    })
-                    .catch((err) => {
-                        console.log('cannot connect to DB ' , err)
-                    })
+                // CODE Lại kết nối cơ sở dữ liệu mongodb và lấy ra dữ liệu địa chỉ node
+
+                // dbHelper.connectDB()
+                //     .then((connection) => {
+                //         var stringQuery = 'SELECT * FROM nodes'
+                //         connection.query(stringQuery, (err, data) => {
+                //             // testChain.nodes = data
+                //             // console.log(data)
+                //             const rows = data
+                //             for (let i = 0; i < rows.length; i++) {
+                //                 testChain.nodes[i] = rows[i].NodeAddress
+                //             }
+                //             dbHelper.closeDB(connection)
+
+                //             request(`http://127.0.0.1:3000/blockchain/consensus`, { json: true }, (err, res, body) => {
+                //                 if (err) { return console.log(err); }
+                //               });
+                //         })
+                //     })
+                //     .catch((err) => {
+                //         console.log('cannot connect to DB ' , err)
+                //     })
             }   
 
         }
