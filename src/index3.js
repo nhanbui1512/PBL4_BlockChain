@@ -4,10 +4,10 @@ const hbs  = require('express-handlebars');
 const router = require('./routes/index')
 var BlockChain = require('./app/model/BlockChain');
 const route = require('./routes')
-
 const port = 3003;
 const app = express();
-
+const db = require('./config/db/index')
+db.connect();
 
 app.use(express.urlencoded({
     extended: true
@@ -30,12 +30,14 @@ app.listen(port , () => {
 })
 
 
-const request = require('request')
 
-request
-  .get(`http://127.0.0.1:${port}/blockchain/`)
+  const request = require('request')
+
+  request
+  .get(`http://127.0.0.1:${port}/blockchain`)
   .on('response', function(response) {
   })
   .pipe(request.get(`http://127.0.0.1:${port}/blockchain/consensus`))
 
 
+ 

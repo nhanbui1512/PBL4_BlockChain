@@ -2,12 +2,12 @@ const express = require('express')
 const path = require('path')
 const hbs  = require('express-handlebars');
 const router = require('./routes/index')
-var BlockChain = require('./app/modal/BlockChain');
+var BlockChain = require('./app/model/BlockChain');
 const route = require('./routes')
-
 const port = 3004;
 const app = express();
-
+const db = require('./config/db/index')
+db.connect();
 
 app.use(express.urlencoded({
     extended: true
@@ -31,15 +31,13 @@ app.listen(port , () => {
 
 
 
+  const request = require('request')
 
-const request = require('request')
-
-request
-  .get(`http://192.168.0.103:${port}/blockchain/`)
+  request
+  .get(`http://127.0.0.1:${port}/blockchain`)
   .on('response', function(response) {
-    // console.log(response.statusCode) // 200
-    // console.log(response.headers['content-type']) // 'image/png'
   })
-  .pipe(request.get(`http://192.168.0.103:${port}/blockchain/consensus`))
+  .pipe(request.get(`http://127.0.0.1:${port}/blockchain/consensus`))
 
 
+ 

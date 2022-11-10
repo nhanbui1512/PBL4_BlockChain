@@ -1,8 +1,9 @@
-var BlockChain = require('../model/BlockChain')
-var Block = require('../model/Block')
+var BlockChain = require('../model/BlockChain');
+var Block = require('../model/Block');
 const request = require('request');
 const { json, response } = require('express');
 const Node = require('../model/node');
+const Chain = require('../model/chain');
 const { multipleMongooseToObject } = require('../../util/mongoose');
 
 
@@ -115,28 +116,19 @@ class BlockChainController {
                     }
                 })
 
-                // CODE Lại kết nối cơ sở dữ liệu mongodb và lấy ra dữ liệu địa chỉ node
+                Chain.find({}, (err,data) => {
+                    var chain = multipleMongooseToObject(data)
+                    for (let i = 0; i < chain.length; i++) {
+                        const newBlock = new Block
+                        newBlock.preHash = chain[i].preHash
+                        newBlock.data = chain[i].data
+                        newBlock.timeStamp = chain[i].timeStamp
+                        newBlock.hash = chain[i].hash
+                        newBlock.mineVar = chain[i].mineVar
+                        testChain.chain[i] = newBlock
+                    }
+                })
 
-                // dbHelper.connectDB()
-                //     .then((connection) => {
-                //         var stringQuery = 'SELECT * FROM nodes'
-                //         connection.query(stringQuery, (err, data) => {
-                //             // testChain.nodes = data
-                //             // console.log(data)
-                //             const rows = data
-                //             for (let i = 0; i < rows.length; i++) {
-                //                 testChain.nodes[i] = rows[i].NodeAddress
-                //             }
-                //             dbHelper.closeDB(connection)
-
-                //             request(`http://127.0.0.1:3000/blockchain/consensus`, { json: true }, (err, res, body) => {
-                //                 if (err) { return console.log(err); }
-                //               });
-                //         })
-                //     })
-                //     .catch((err) => {
-                //         console.log('cannot connect to DB ' , err)
-                //     })
             }   
 
         }
@@ -163,6 +155,9 @@ class BlockChainController {
             to: req.body.to,
             amount: req.body.amount
         } )
+        
+        var newBlock = new Chain(testChain.getLastBlock())
+        newBlock.save();
 
         if(testChain.nodes.length > 0 ){
             
