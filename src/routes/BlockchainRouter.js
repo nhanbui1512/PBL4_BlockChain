@@ -12,6 +12,7 @@ router.post('/register' , BlockchainController.rigisterNode)
 router.get('/nodes', BlockchainController.nodes)
 router.get('/isvalid',BlockchainController.isValid)
 router.post('/ThemChungChi',BlockchainController.ThemChungChi)
+router.get('/checkdb',BlockchainController.checkDB)
 router.get('/',BlockchainController.startServer);
 
 module.exports = router;

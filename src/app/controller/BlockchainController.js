@@ -1,10 +1,13 @@
 var BlockChain = require('../model/BlockChain');
 var Block = require('../model/Block');
+const hash = require('crypto-js/sha256')
+
 const request = require('request');
 const { json, response } = require('express');
 const Node = require('../model/node');
 const Chain = require('../model/chain');
 const { multipleMongooseToObject } = require('../../util/mongoose');
+const chain = require('../model/chain');
 
 
 
@@ -145,7 +148,9 @@ class BlockChainController {
 
     // GET /blockchain/chain
     async getChain(req, res){
-        res.status(200).json(testChain.chain)
+        // res.status(200).json(testChain.chain)
+        res.setHeader('Content-type','application/json')
+        res.end(JSON.stringify(testChain.chain))
     }
 
     // POST //blockchain/mine
@@ -236,6 +241,39 @@ class BlockChainController {
     // GET blockchain/isvalid
     async isValid(req, res){
         res.send(testChain.isValid())
+    }
+
+    async checkDB(req,res){
+        Chain.find({}, (err, data) => {
+            if(! err) {
+                var chainDB = multipleMongooseToObject(data)
+                for (let i = 1; i < chainDB.length; i++) {
+                    const currentBlock = chainDB[i]
+                    const preBlock = chainDB[i - 1]
+
+                    console.log(hash(currentBlock.preHash + JSON.stringify(currentBlock.data) + currentBlock.timeStamp + currentBlock.mineVar ).toString())
+
+                    if( currentBlock.hash != preBlock.hash){
+                        console.log(currentBlock)
+                        chain.updateOne({_id: currentBlock._id}, testChain.chain[i], (err, res) => {
+                        })
+                    }
+                    if(currentBlock.hash !=
+                         hash(currentBlock.preHash + JSON.stringify(currentBlock.data) + currentBlock.timeStamp + currentBlock.mineVar ).toString()
+                    ){
+                        
+                        console.log(currentBlock)
+                        chain.updateOne({_id: currentBlock._id}, testChain.chain[i], (err, res) => {
+                        })
+                    }
+                }
+
+                res.send('cuccess')
+            }
+            else{
+                res.status(500).json('fail')
+            }
+        })
     }
 
 

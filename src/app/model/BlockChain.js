@@ -39,6 +39,7 @@ module.exports = class BlockChain {
                 return false
             }
             if(currentBlock.preHash != preBlock.hash) {
+                console.log(currentBlock)
                 return false
             }
 
