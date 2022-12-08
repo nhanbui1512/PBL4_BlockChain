@@ -155,11 +155,14 @@ class BlockChainController {
 
     // POST //blockchain/mine
     async mine(req, res){ 
-        testChain.addBlock({
-            from: req.body.from,
-            to: req.body.to,
-            amount: req.body.amount
-        } )
+        // testChain.addBlock({
+        //     from: req.body.from,
+        //     to: req.body.to,
+        //     amount: req.body.amount
+        // } )
+
+        const data = req.body.data
+        testChain.addBlock(data)
         
         var newBlock = new Chain(testChain.getLastBlock())
         newBlock.save();
