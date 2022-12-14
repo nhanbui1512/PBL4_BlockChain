@@ -27,41 +27,6 @@ const options = {
 const testChain = new BlockChain(4)
 var theFirst = true
 
-
-// var ChungChi = {
-//     id: 1200,
-//     sanpham: {
-//         idSanPham: 123,
-//         TenSanPham: "Kẹo Gạo Lứt Mè Đen",
-//         NguyenLieu: [ {
-//             idNguyenLieu: 2,
-//             tenNguyenLieu: 'Mè Đen',
-//             nguonGoc: 'Nhap Khau Thai Lan',
-//             },
-
-//             {
-//                 idNguyenLieu: 3,
-//                 tenNguyenLieu: 'Gao Lut',
-//                 nguonGoc: 'A Luoi - Thua Thien Hue',
-//                 },
-
-//         ],
-//         QuyTrinhSanXuat: {
-//             idQuyTrinh: 12,
-//             TenQuyTrinh: 'Quy Trinh San Xuat Keo Gao Lut Me Den',
-//             MoTaQuyTrinh: 'Duoc San Xuat theo cong nghe Nhat Ban...',
-//             URl: './img/keogaolut.pdf',
-
-//         },
-//         ngayCap: Date.now,
-//         IDNhaSanXuat: 20123123,
-//         IDCQKiemDinh: 21412313,
-//     }
-// }
-
-// testChain.addBlock(ChungChi)
-
-
 class BlockChainController {
 
 
