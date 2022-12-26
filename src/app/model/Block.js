@@ -14,10 +14,6 @@ module.exports = class Block {
         return hash(this.preHash + JSON.stringify(this.data) + this.timeStamp + this.mineVar ).toString();
     }
 
-    handleCalHash(preHash, data , timeStamp , mineVar){
-        return hash(preHash + JSON.stringify(data) + timeStamp + mineVar ).toString();
-    }
-
     mine(difficulty) {
         while( !this.hash.startsWith('0'.repeat(difficulty)) ){
             this.mineVar ++  
